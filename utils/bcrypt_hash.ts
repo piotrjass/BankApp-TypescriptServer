@@ -4,7 +4,7 @@ async function runBcrypt(password: string) {
     const hashedPassword = await bcrypt.hash(password, 12);
     console.log("Hashed Password:", hashedPassword);
     const isMatch = await bcrypt.compare(password, hashedPassword);
-    console.log("Password Match:", isMatch);
+    return hashedPassword;
   } catch (error) {
     console.error("Error:", error);
   }

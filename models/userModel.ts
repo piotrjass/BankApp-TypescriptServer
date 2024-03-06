@@ -1,5 +1,4 @@
-import { Schema, model, connect } from "mongoose";
-import runBcrypt from "../utils/bcrypt_hash";
+import { Schema, model, Model, connect } from "mongoose";
 import connectToDatabase from "../utils/connect_to_db";
 
 interface IUser {
@@ -15,17 +14,7 @@ const userSchema = new Schema<IUser>({
   password: { type: String, required: true },
 });
 
-const User = model<IUser>("User", userSchema);
+type userModel = Model<IUser>;
 
-run().catch((err) => console.log(err));
-
-async function run() {
-  await connectToDatabase();
-  const user = new User({
-    name: "Bill",
-    email: "bill@initech.com",
-  });
-  await user.save();
-
-  console.log(user.email);
-}
+const User: userModel = model<IUser, userModel>("User", userSchema);
+export default User;
