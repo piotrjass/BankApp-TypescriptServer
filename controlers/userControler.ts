@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User from "../models/userModel"; // Import modelu User
+import User from "../models/userModel";
 import runBcrypt from "../utils/bcrypt_hash";
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
@@ -20,13 +20,15 @@ export const createUser = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { name, email, plain_password } = req.body;
+    const { name, email, plain_password, cards, contacts } = req.body;
     const password = await runBcrypt(plain_password);
-    console.log(name, email, password);
+    console.log(name, email, password, cards, contacts);
     const newUser = new User({
       name,
       email,
       password,
+      cards,
+      contacts,
     });
     await newUser.save();
     res.status(200).json({
