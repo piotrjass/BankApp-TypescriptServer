@@ -1,16 +1,16 @@
 import { Schema, model, Model, connect } from "mongoose";
-interface ICard {
+export interface ICard {
   color: string;
   balance: number;
   last_digits: number;
-  exp_datepe: string;
+  exp_date: string;
 }
 
-const cardSchema = new Schema<ICard>({
+export const cardSchema = new Schema<ICard>({
   color: { type: String, required: true },
   balance: { type: Number, required: true },
   last_digits: { type: Number, required: true },
-  exp_datepe: { type: String, required: true },
+  exp_date: { type: String, required: true },
 });
 
 type cardModel = Model<ICard>;

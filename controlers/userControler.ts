@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import User from "../models/userModel";
 import runBcrypt from "../utils/bcrypt_hash";
+import card from "../models/cardModel";
+import { ICard } from "../models/cardModel";
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -21,13 +23,14 @@ export const createUser = async (
 ): Promise<void> => {
   try {
     const { name, email, plain_password, cards, contacts } = req.body;
+    console.log(name, email, plain_password, cards, contacts);
+    const cardModels = cards.map((cardData: ICard) => new card(cardData));
     const password = await runBcrypt(plain_password);
-    console.log(name, email, password, cards, contacts);
     const newUser = new User({
       name,
       email,
       password,
-      cards,
+      cards: cardModels,
       contacts,
     });
     await newUser.save();
