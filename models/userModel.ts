@@ -1,5 +1,4 @@
 import { Schema, model, Model, connect } from "mongoose";
-import connectToDatabase from "../utils/connect_to_db";
 
 interface IUser {
   name: string;
