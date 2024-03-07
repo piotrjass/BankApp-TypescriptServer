@@ -10,6 +10,7 @@ export const getCards = async (req: Request, res: Response): Promise<void> => {
       return;
     }
     const cards = user.cards;
+
     res.status(200).json({
       message: "success",
       cards: cards,
