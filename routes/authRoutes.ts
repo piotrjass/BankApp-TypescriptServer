@@ -1,7 +1,8 @@
 import express from "express";
-import { login } from "../controlers/authControler";
+import { login, checkCookie } from "../controlers/authControler";
 
 const router = express.Router();
-router.get("/login", login);
+router.post("/login", login);
+router.get("/login", checkCookie);
 
 export default router;
