@@ -18,27 +18,33 @@ const generateToken = (id: string) => {
 };
 
 export const checkCookie = async (req: Request, res: Response) => {
-  const token = req.cookies["token"];
-  if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    res.status(200).json({ success: true, userId: decoded.id });
+    const token = req.cookies.token;
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const isVerified = jwt.verify(token, JWT_SECRET);
+    if (!isVerified) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+    res.status(200).json({ message: "Token verified" });
   } catch (error) {
-    res.status(401).json({ message: "Unauthorized" });
+    console.error("Error verifying token:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
+  console.log(email, password);
   try {
     const user = await User.findOne({ email });
-
+    console.log(user);
     if (!user) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log(isMatch);
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
@@ -47,7 +53,7 @@ export const login = async (req: Request, res: Response) => {
 
     const cookieOptions: CookieOptions = {
       httpOnly: true,
-      expires: new Date(Date.now() + 60 * 60 * 24 * 30),
+      expires: new Date(new Date().getTime() + 100 * 1000),
       secure: true,
     };
     res.cookie("token", token, cookieOptions);
